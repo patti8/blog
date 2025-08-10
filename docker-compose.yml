@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tomatech:latest
+    environment:
+      RAILS_ENV: production
+      RACK_ENV: production
+      PORT: 3000
+      RAILS_SERVE_STATIC_FILES: "true"
+      RAILS_LOG_TO_STDOUT: "true"
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+      DATABASE_URL: sqlite3:/rails/db/production.sqlite3
+      SOLID_QUEUE_IN_PUMA: "1"
+    ports:
+      - "0808:3000"
+    volumes:
+      - rails_db:/rails/db
+      - rails_storage:/rails/storage
+      - rails_log:/rails/log
+    restart: unless-stopped
+
+volumes:
+  rails_db:
+  rails_storage:
+  rails_log:
+
