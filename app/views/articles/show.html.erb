@@ -1,6 +1,6 @@
 <article class="prose prose-lg lg:prose-xl dark:prose-invert max-w-none">
   <p>
-    <%= link_to "\u2190 Kembali ke semua tulisan", articles_path, class: "no-underline text-brand-accent hover:underline mb-8 block" %>
+    <%= link_to "\u2190 Kembali ke semua tulisan", root_path, class: "no-underline text-brand-accent hover:underline mb-8 block" %>
   </p>
   <h1><%= @article.title %></h1>
   <% if @article.published_at.present? %>

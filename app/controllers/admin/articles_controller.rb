@@ -5,7 +5,7 @@ class Admin::ArticlesController < ApplicationController
 
   # GET /admin/articles or /admin/articles.json
   def index
-    @admin_articles = Article.all
+    @admin_articles = Article.all.order(created_at: :desc)
   end
 
   # GET /admin/articles/1 or /admin/articles/1.json

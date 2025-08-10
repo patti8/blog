@@ -14,23 +14,29 @@ FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 # Rails app lives here
 WORKDIR /rails
 
-# Install base packages
+# Install base runtime packages only (keep image lean)
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 && \
+    apt-get install --no-install-recommends -y libjemalloc2 libvips libsqlite3-0 && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-# Set production environment
+# Set production environment (optimize for low memory)
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+    BUNDLE_WITHOUT="development:test" \
+    RAILS_MAX_THREADS="2" \
+    WEB_CONCURRENCY="1" \
+    RUBY_YJIT_ENABLE="0" \
+    DISABLE_BOOTSNAP="1" \
+    LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libjemalloc.so.2" \
+    MALLOC_CONF="background_thread:true,dirty_decay_ms:0,muzzy_decay_ms:0"
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
 
 # Install packages needed to build gems
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config && \
+    apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config libsqlite3-dev && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
@@ -67,6 +73,6 @@ USER 1000:1000
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-# Start server via Thruster by default, this can be overwritten at runtime
+# Start server (Puma) by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD ["./bin/thrust", "./bin/rails", "server", "-b", "0.0.0.0", "-p", "${PORT:-3000}"]
+CMD ["sh", "-lc", "bundle exec puma -C config/puma.rb -b tcp://0.0.0.0:${PORT:-3000}"]

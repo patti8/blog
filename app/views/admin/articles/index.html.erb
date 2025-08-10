@@ -3,9 +3,12 @@
       <p class="bg-green-100 text-green-800 px-4 py-2 rounded-md mb-6"><%= notice %></p>
     <% end %>
 
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
       <h1 class="text-3xl font-bold text-gray-800">Articles</h1>
-      <%= link_to "New article", new_admin_article_path, class: "bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200" %>
+      <div class="flex items-center gap-3">
+        <%= link_to "New article", new_admin_article_path, class: "inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200" %>
+        <%= button_to "Log out", destroy_user_session_path, method: :delete, form: { data: { turbo_confirm: "Are you sure?" } }, class: "inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-200" %>
+      </div>
     </div>
 
     <div id="admin_articles" class="bg-white shadow-md rounded-lg overflow-hidden">
