@@ -16,7 +16,7 @@ services:
       DATABASE_URL: sqlite3:/rails/db/production.sqlite3
       SOLID_QUEUE_IN_PUMA: "1"
     ports:
-      - "0808:3000"
+      - "1080:3000"
     volumes:
       - rails_db:/rails/db
       - rails_storage:/rails/storage
