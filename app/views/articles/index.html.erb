@@ -9,7 +9,7 @@
   // Fungsi untuk mengambil semua artikel dari API Rails
   getArticles() {
       this.isLoading = true;
-      fetch('https://localhost3011.2mate.ch/api/v1/articles')
+      fetch('/api/v1/articles')
           .then(response => response.json())
           .then(data => {
               this.articles = data;
@@ -26,7 +26,7 @@
   getArticle(slug) {
       this.isLoading = true;
       this.currentArticle = null; // Kosongkan dulu artikel sebelumnya
-      fetch(`https://localhost3011.2mate.ch/api/v1/articles/${slug}`)
+      fetch(`/api/v1/articles/${slug}`)
           .then(response => response.json())
           .then(data => {
               this.currentArticle = data;

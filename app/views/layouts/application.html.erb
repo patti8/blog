@@ -25,6 +25,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com/3.4.1?plugins=typography"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+      // Initialize theme early and avoid ReferenceError before Alpine boots
+      window.__theme = localStorage.getItem('theme') || 'light';
+      if (window.__theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -53,16 +60,16 @@
     </script>
   </head>
 
-  <body class="bg-off-white text-brand-dark dark:bg-dark-bg dark:text-dark-text antialiased">
+  <body class="bg-off-white text-brand-dark dark:bg-dark-bg dark:text-dark-text antialiased" x-data="{ theme: window.__theme }" x-effect="localStorage.setItem('theme', theme)">
     <div class="max-w-3xl mx-auto px-6 py-8 md:py-12">
 
       <!-- HEADER -->
       <header class="flex justify-between items-center mb-12">
-          <a href="#" @click.prevent="view = 'list'" class="text-xl md:text-2xl font-bold text-brand-dark dark:text-white hover:text-brand-accent dark:hover:text-brand-accent transition-colors">
+          <a href="/" class="text-xl md:text-2xl font-bold text-brand-dark dark:text-white hover:text-brand-accent dark:hover:text-brand-accent transition-colors">
               🍅 tomatech
           </a>
           <div class="flex items-center space-x-4">
-              <button @click="theme = (theme === 'light' ? 'dark' : 'light'); document.documentElement.classList.toggle('dark')"
+              <button @click="theme = (theme === 'light' ? 'dark' : 'light'); window.__theme = theme; document.documentElement.classList.toggle('dark')"
                       class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                       aria-label="Toggle Dark Mode">
                   <svg x-show="theme === 'light'" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>

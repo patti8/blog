@@ -12,6 +12,8 @@ module Tomatech
     config.load_defaults 8.0
 
     config.hosts << "localhost3011.2mate.ch"
+    config.hosts << "2mate.ch"
+    config.hosts << "http://localhost:3011/"
 
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
